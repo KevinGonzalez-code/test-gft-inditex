@@ -55,7 +55,7 @@ public class DefaultPriceServiceTest {
     }
 
     @Test
-    public void testGetPriceWithDifferentBrand() {
+    public void getPriceWithDifferentBrand() {
 
         LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 14, 10, 0);
         Price expectedPrice = new Price();
@@ -78,21 +78,20 @@ public class DefaultPriceServiceTest {
         LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 15, 10, 0);
         Price expectedPrice = new Price();
 
-        expectedPrice.setBrandId(2L);
+        expectedPrice.setBrandId(1L);
         expectedPrice.setProductId(35455L);
-        expectedPrice.setPrice(BigDecimal.valueOf(35.50));
+        expectedPrice.setPrice(BigDecimal.valueOf(30.50));
 
         when(priceDao.getPrice(35455L, 1L, applicationDate)).thenReturn(expectedPrice);
 
-        // Act
-        Price actualPrice = defaultPriceService.getPrice(35455L, 2L, applicationDate);
+        Price actualPrice = defaultPriceService.getPrice(35455L, 1L, applicationDate);
 
         assertNotNull(actualPrice);
         assertEquals(expectedPrice.getPrice(), actualPrice.getPrice());
     }
 
     @Test
-    public void testGetPriceWithDifferentProduct() {
+    public void getPriceWithDifferentProduct() {
 
         LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 14, 10, 0);
         Price expectedPrice = new Price();
