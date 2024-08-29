@@ -1,45 +1,90 @@
-# INDITEX PRICE SERVICE
+# Inditex Price Service
 
-##
+## Descripción
 
-This project it is a functioning Spring Boot service.  
-It is based on version 3.3.3 of Spring Boot and 17 of Java.
+Este proyecto es una aplicación Spring Boot que provee un servicio REST para consultar el precio final de un producto de la marca ZARA en función de la fecha de aplicación, el identificador del producto y el identificador de la cadena.
 
-### General service configuration:
+El servicio consulta una base de datos en memoria (H2) que contiene una tabla con la información de precios (`PRICES`), y devuelve el precio correcto basado en la fecha de aplicación y la prioridad de la tarifa.
 
-The specific variables of the microservice are the following:
+## Requisitos
 
-ini
-PORT_NUMBER=8080
+-   JDK 17 o superior
+-   Maven 3.8.0 o superior
+-   Docker (opcional, para la ejecución en un contenedor)
+-   Git
 
--   Run with spring-boot
+## Instalación
 
-To run the application
-mvn spring-boot:run -Dspring-boot.run.profiles=local
+1. Clona el repositorio en tu máquina local:
 
-## Configuration to start the service from docker
+    ```bash
+    git clone https://github.com/KevinGonzalez-code/test-gft-inditex.git
+    cd test-gft-inditex
+    ```
 
-Build the Docker image:
+2. Compila y empaqueta el proyecto utilizando Maven:
+
+    ```bash
+    mvn clean install
+    ```
+
+3. Ejecuta la aplicación:
+
+    ```bash
+    mvn spring-boot:run
+    ```
+
+    La aplicación se iniciará en `http://localhost:8080`.
+
+## Uso
+
+Puedes consultar el precio de un producto utilizando el siguiente endpoint:
 
 ```
-docker build -t inditex-price-service .
+GET /api/v1/price?brandId={brandId}&productId={productId}&applicationDate={applicationDate}
 ```
 
-Execute the container:
+Por ejemplo:
 
 ```
-docker run -p 8080:8080 inditex-price-service
+http://localhost:8080/api/v1/price?brandId=1&productId=35455&applicationDate=2020-06-16T21:00:00
 ```
 
-This will expose the application at http://localhost:8080, and the application will be ready to receive applications.
+Esto devolverá un JSON con el precio final aplicable a esa fecha, producto y cadena.
 
-To build and run the application using Docker:
+## Tests
 
+El proyecto incluye tanto tests unitarios como de integración. Para ejecutar los tests, usa el siguiente comando:
+
+```bash
+mvn test
 ```
-docker build -t inditex-price-service .
-docker run -p 8080:8080 inditex-price-service
-```
 
-## Swagger UI
+Esto ejecutará todos los tests definidos en el proyecto, incluyendo los cinco casos de prueba solicitados en el enunciado.
 
-The API documentation is available at: http://localhost:8080/swagger-ui.html.
+## Ejecución en Docker
+
+Si prefieres ejecutar la aplicación en un contenedor Docker:
+
+1. Construye la imagen Docker:
+
+    ```bash
+    docker build -t inditex-price-service .
+    ```
+
+2. Ejecuta el contenedor:
+
+    ```bash
+    docker run -p 8080:8080 inditex-price-service
+    ```
+
+La aplicación estará disponible en `http://localhost:8080`.
+
+## Especificaciones del Código
+
+-   **Arquitectura Hexagonal**: El proyecto sigue una arquitectura hexagonal, separando claramente la lógica de negocio, las interfaces, y las implementaciones de persistencia.
+-   **Base de datos H2**: Se utiliza una base de datos en memoria H2 para simplificar el despliegue y las pruebas.
+
+-   **Swagger UI**: Se ha configurado Swagger UI para facilitar la exploración de la API REST. Puedes acceder a la documentación interactiva en `http://localhost:8080/swagger-ui.html`.
+
+-   **Manejo de Excepciones**: Se implementa un controlador de excepciones global para gestionar los errores de manera uniforme y proporcionar respuestas claras en caso de errores como "precio no encontrado" o "parámetros incorrectos".
