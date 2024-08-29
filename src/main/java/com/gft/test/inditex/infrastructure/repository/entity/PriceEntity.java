@@ -17,6 +17,23 @@ import java.time.LocalDateTime;
 @IdClass(PriceIdEntity.class)
 public class PriceEntity {
 
+    /*
+     * He decidido hacer una PK compuesta por varias columnas para asegurar la
+     * unicidad de cada registro y evitar duplicados
+     * basándome en esta PK compuesta.
+     * 
+     * BRAND_ID: Identifica la marca a la pertenece el precio
+     * PRICE_LIST: Identifica de manera única la tarifa
+     * PRODUCT_ID: Identifica un producto en especifico
+     * START_DATE: Define el comienzo del rango de fechas durante el precio se
+     * aplica
+     * 
+     * De esta forma se garantiza que no haya dos registros con la misma combinación
+     * de marca
+     * , tarifa, producto y fecha de inicio y evitaríamos la duplicación de
+     * registros
+     */
+
     @Id
     private Long brandId;
 
